@@ -213,7 +213,7 @@ export default function SignUpPage() {
                     {error && (
                       <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>{error === "email rate limit exceeded" ? "Sorry the srver is busy at the moment. Please try again later." : error}</AlertDescription>
+                        <AlertDescription>{(error.message || String(error)).includes("email rate limit exceeded") ? "Sorry, the server is busy at the moment. Please try again later." : (error.message || String(error))}</AlertDescription>
                       </Alert>
                     )}
                     <Button type="submit" className="w-full" disabled={isLoading}>
