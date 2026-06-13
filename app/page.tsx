@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -21,6 +26,17 @@ import {
 import { InvestmentPlansDisplay } from "@/components/investment-plans-display"
 
 export default function HomePage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    const hash = window.location.hash;
+
+    if (hash.includes("type=recovery")) {
+      router.replace("/reset-password" + hash);
+    }
+  }, [router]);
+
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
