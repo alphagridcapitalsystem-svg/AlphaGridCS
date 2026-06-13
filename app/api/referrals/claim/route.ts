@@ -97,8 +97,8 @@ export async function POST(req: Request) {
 
     const oldBalance = Number(wallet.balance || 0)
     const newBalance = oldBalance + totalReward
-    const newTotalEarned =
-      Number(wallet.total_earned || 0) + totalReward
+    //const newTotalEarned =
+      //Number(wallet.total_earned || 0) + totalReward
 
     // ------------------------------------
     // Update wallet
@@ -108,7 +108,7 @@ export async function POST(req: Request) {
       .from("wallets")
       .update({
         balance: newBalance,
-        total_earned: newTotalEarned,
+        //total_earned: newTotalEarned,
       })
       .eq("id", wallet.id)
 
