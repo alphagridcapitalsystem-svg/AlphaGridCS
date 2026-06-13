@@ -17,34 +17,45 @@ const [ready, setReady] = useState(false);
 
 // Step 1: detect recovery session from URL hash
 useEffect(() => {
-const initRecovery = async () => {
-try {
-const hash = window.location.hash;
+  const initRecovery = async () => {
+    try {
+      setLoading(true);
 
-    if (!hash.includes("type=recovery")) {
-      setError("Invalid or expired reset link");
-      setLoading(false);
-      return;
-    }
+      const hash = window.location.hash;
 
-    // This ensures Supabase picks up the session from the URL
-    const { data, error } = await supabase.auth.getSession();
+      const params = new URLSearchParams(hash.replace("#", ""));
 
-    if (error || !data.session) {
-      setError("Failed to initialize reset session");
-    } else {
+      const access_token = params.get("access_token");
+      const refresh_token = params.get("refresh_token");
+      const type = params.get("type");
+
+      if (type !== "recovery" || !access_token || !refresh_token) {
+        setError("Invalid or expired reset link");
+        setLoading(false);
+        return;
+      }
+
+      const { error } = await supabase.auth.setSession({
+        access_token,
+        refresh_token,
+      });
+
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+
       setReady(true);
+    } catch (err) {
+      setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError("Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-initRecovery();
-
-}, [supabase]);
+  initRecovery();
+}, []);
 
 // Step 2: update password
 const handleUpdatePassword = async () => {
