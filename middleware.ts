@@ -29,7 +29,7 @@ const role = profile?.role
     role === "super_admin"
 
   // fetch settings safely
-  const url_from_env = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  const url_from_env = process.env.NEXT_PUBLIC_SITE_URL
 
   const res = await fetch(`${url_from_env}/api/settings`)
   const settings = await res.json().catch(() => null)

@@ -8,7 +8,7 @@ import { Landmark, ShieldAlert, RefreshCw } from "lucide-react"
 async function getSettings() {
   try {
     const baseUrl =
-      process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+      process.env.NEXT_PUBLIC_SITE_URL
 
     const res = await fetch(`${baseUrl}/api/settings`, {
       cache: "no-store",
