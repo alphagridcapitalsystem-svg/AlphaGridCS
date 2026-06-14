@@ -307,7 +307,7 @@ export default function DepositPage() {
                   placeholder="Enter amount"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  min={MIN_DEPOSIT}
+                  min={minDeposit}
                   required
                 />
               </div>
