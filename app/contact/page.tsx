@@ -17,33 +17,6 @@ import {
   Headphones,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { Metadata } from "next"
-
-export const metadata: Metadata = {
-  title: "Contact",
-
-  description:
-    "Contact AlphaGrid Capital System for customer support, investment inquiries, account assistance, and general questions.",
-
-  keywords: [
-    "AlphaGrid contact",
-    "investment support",
-    "customer support",
-    "help center",
-    "telegram support",
-  ],
-
-  openGraph: {
-    title: "Contact | AlphaGrid Capital System",
-
-    description:
-      "Get in touch with AlphaGrid Capital System support.",
-
-    url: "https://yourdomain.com/contact",
-
-    type: "website",
-  },
-}
 
 export default function ContactPage() {
   const [email, setEmail] = useState("")
