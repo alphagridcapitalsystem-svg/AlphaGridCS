@@ -60,6 +60,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/icon.png", // Standard shortcut icon
+    shortcut: "/icon.png",
+    apple: "/apple-icon.png", // Recommended for high-res displays
+  },
 };
 
 export const viewport: Viewport = {
