@@ -61,8 +61,8 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/favicon.ico", // Standard shortcut icon
-    shortcut: "/favicon.ico",
+    icon: "/icon_x192.png", // Standard shortcut icon
+    shortcut: "/icon_x192.png",
     apple: "/apple-icon.png", // Recommended for high-res displays
   },
   alternates: {
