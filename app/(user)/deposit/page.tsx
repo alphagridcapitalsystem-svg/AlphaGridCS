@@ -49,9 +49,7 @@ export default function DepositPage() {
   const [success, setSuccess] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
   const router = useRouter()
-  const [minDeposit, setMinDeposit] = useState(0)
-
-  const MIN_DEPOSIT = Number(minDeposit.value)
+  const [MIN_DEPOSIT, setMinDeposit] = useState(0)
 
   useEffect(() => {
     const fetchPaymentDetails = async () => {
