@@ -56,9 +56,9 @@ export default function DepositPage() {
       setIsLoading(true)
       const supabase = createClient()
 
-      const { data: minDeposit, error:minDepositError } = await supabase
-        .from('platform_settings')
-        .select('value')
+      const { data: minDepositData } = await supabase
+        .from("platform_settings")
+        .select("value")
         .eq("key", "min_deposit")
         .single()
 
