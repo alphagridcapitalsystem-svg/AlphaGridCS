@@ -1,0 +1,8 @@
+{
+  "name": "AlphaGrid Capital System",
+  "short_name": "AlphaGrid",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}
