@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Secure investment platform offering transparent investment plans, referral rewards, and account management.",
+    "Secure investment platform offering transparent investment plans, referral rewards, automated account management, and real-time portfolio tracking for global users.",
 
   keywords: [
     "AlphaGrid Capital System",
