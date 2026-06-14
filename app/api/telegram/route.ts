@@ -62,19 +62,19 @@ export async function POST(req: Request) {
 
     /* ---------------- ADMIN REPLY FLOW ---------------- */
 
-    /* ---------------- ADMIN REPLY FLOW ---------------- */
-
     if (String(userId) === String(ADMIN_ID) && reply) {
         let targetUserId: string | null = null;
 
-        // 1. Try native forward extraction first
-        if (reply.forward_from?.id) {
-            targetUserId = String(reply.forward_from.id);
-        } 
-        // 2. Fallback: Ultra-robust match for the digits inside the text block
-        else if (reply.text) {
-            // This looks specifically for "User ID:" followed by spaces and captures all numbers
+        // Extract the user ID directly from the text block being replied to
+        if (reply.text) {
             const match = reply.text.match(/User ID:\s*(\d+)/i);
+            if (match && match[1]) {
+                targetUserId = match[1];
+            }
+        } 
+        // Fallback check for captions if you are replying to an image block the bot built
+        else if (reply.caption) {
+            const match = reply.caption.match(/User ID:\s*(\d+)/i);
             if (match && match[1]) {
                 targetUserId = match[1];
             }
@@ -115,48 +115,81 @@ export async function POST(req: Request) {
         } else {
             await tg("sendMessage", {
                 chat_id: ADMIN_ID,
-                text: "❌ Cannot extract User ID. Ensure you reply directly to the 'Above Message Detail' data block text.",
+                text: "❌ Error: Could not extract User ID from this message structure.",
             });
         }
 
         return NextResponse.json({ ok: true });
     }
 
-    /* ---------------- USER → ADMIN FORWARD ---------------- */
+    /* ---------------- USER → ADMIN SINGLE MERGED FLOW ---------------- */
     
     if (String(userId) === String(ADMIN_ID)) {
         return NextResponse.json({ ok: true });
     }
 
-    // 1. Send native forward to Admin
-    const forwardRes = await tg("forwardMessage", {
-        chat_id: ADMIN_ID,
-        from_chat_id: chatId,
-        message_id: message.message_id,
-    });
+    const userName = message.from.first_name || "Unknown";
+    
+    // Construct the metadata footer
+    const footer = `\n\n— — — — — — — — — — — — —\n👤 <b>Sender:</b> ${userName}\n🆔 <b>User ID:</b> ${userId}`;
 
-    // 2. Thread the log detail block
-    if (forwardRes && forwardRes.ok) {
-        const forwardedMessageId = forwardRes.result.message_id;
-        const userName = message.from.first_name || "Unknown";
-        
-        // Formatted cleanly without standard HTML wrappers inside the code tag to keep matching strict
-        const header = `☝️ <b>Above Message Detail</b>\n` +
-                       `👤 <b>Sender:</b> ${userName}\n` +
-                       `🆔 <b>User ID:</b> ${userId}`;
-
+    // Handle Text Messages
+    if (text) {
         await tg("sendMessage", {
             chat_id: ADMIN_ID,
-            text: header,
-            reply_to_message_id: forwardedMessageId, 
-            parse_mode: "HTML"
-        });
-
-        await tg("sendMessage", {
-            chat_id: chatId, 
-            text: "✅ Your message has been received! An admin will review it and contact you soon.",
+            text: `${text}${footer}`,
+            parse_mode: "HTML",
         });
     }
+
+    // Handle Photos
+    if (message.photo) {
+        const fileId = message.photo[message.photo.length - 1].file_id;
+        const captionText = message.caption ? `${message.caption}${footer}` : `📷 Photo Sent${footer}`;
+        await tg("sendPhoto", {
+            chat_id: ADMIN_ID,
+            photo: fileId,
+            caption: captionText,
+            parse_mode: "HTML",
+        });
+    }
+
+    // Handle Documents
+    if (message.document) {
+        const fileId = message.document.file_id;
+        const captionText = message.caption ? `${message.caption}${footer}` : `📄 Document Sent${footer}`;
+        await tg("sendDocument", {
+            chat_id: ADMIN_ID,
+            document: fileId,
+            caption: captionText,
+            parse_mode: "HTML",
+        });
+    }
+
+    // Handle Voice Messages
+    if (message.voice) {
+        // Voice updates don't support custom text captions directly in Telegram, 
+        // so we send the voice clip first and immediately thread the user details right under it.
+        const voiceRes = await tg("sendVoice", {
+            chat_id: ADMIN_ID,
+            voice: message.voice.file_id,
+        });
+
+        if (voiceRes && voiceRes.ok) {
+            await tg("sendMessage", {
+                chat_id: ADMIN_ID,
+                text: `☝️ Voice Note above from:${footer}`,
+                reply_to_message_id: voiceRes.result.message_id,
+                parse_mode: "HTML",
+            });
+        }
+    }
+
+    // Confirmation back to user
+    await tg("sendMessage", {
+        chat_id: chatId,
+        text: "✅ Your message has been received! An admin will review it and contact you soon.",
+    });
 
     return NextResponse.json({ ok: true });
 }
