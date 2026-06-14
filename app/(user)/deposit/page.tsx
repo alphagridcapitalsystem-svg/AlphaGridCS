@@ -49,16 +49,7 @@ export default function DepositPage() {
   const [success, setSuccess] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
   const router = useRouter()
-
-  const { data: minDeposit, error:minDepositError } = await supabase
-    .from('platform_settings')
-    .select('value')
-    .eq("key", "min_deposit")
-    .single()
-
-  if(minDepositError) {
-    throw minDepositError
-  }
+  const [minDeposit, setMinDeposit] = useState(0)
 
   const MIN_DEPOSIT = Number(minDeposit.value)
 
@@ -66,6 +57,14 @@ export default function DepositPage() {
     const fetchPaymentDetails = async () => {
       setIsLoading(true)
       const supabase = createClient()
+
+      const { data: minDeposit, error:minDepositError } = await supabase
+        .from('platform_settings')
+        .select('value')
+        .eq("key", "min_deposit")
+        .single()
+
+      setMinDeposit(Number(minDepositData?.value ?? 2500))
       
       // First try payment_methods table
       const { data: paymentMethods } = await supabase
