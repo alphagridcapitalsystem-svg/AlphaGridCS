@@ -65,6 +65,9 @@ export const metadata: Metadata = {
     shortcut: "/favicon.ico",
     apple: "/apple-icon.png", // Recommended for high-res displays
   },
+  alternates: {
+    canonical: "/", // This tells Google to append the current path straight to the metadataBase root
+  },
 };
 
 export const viewport: Viewport = {
