@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { SuperAdminSeeder } from '@/components/superadmin-seeder'
+import Script from 'next/script'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
@@ -72,12 +73,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  // Pure structural schema object
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -86,15 +82,15 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className="bg-background" suppressHydrationWarning>
-      <head>
-        {/* Safe framework injection mechanism for structured data */}
-        <script
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-sans antialiased">
+        {/* Next.js Script component safely placed here so it injects perfectly */}
+        <Script
+          id="structured-data-website"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
