@@ -34,7 +34,6 @@ export async function POST(req: Request) {
     const message = update.message;
     const reply = message?.reply_to_message;
 
-    // Fast return if it's not a standard message update
     if (!message) {
         return NextResponse.json({ ok: true });
     }
@@ -64,8 +63,19 @@ export async function POST(req: Request) {
     /* ---------------- ADMIN REPLY FLOW ---------------- */
 
     if (String(userId) === String(ADMIN_ID) && reply) {
-        // Native forwards guarantee forward_from is visible to the bot
-        const targetUserId = reply.forward_from?.id;
+        let targetUserId: string | null = null;
+
+        // 1. Try native forward extraction first
+        if (reply.forward_from?.id) {
+            targetUserId = String(reply.forward_from.id);
+        } 
+        // 2. Fallback: Parse the user ID from our custom metadata text block if admin replies to that instead
+        else if (reply.text && reply.text.includes("🆔 User ID:")) {
+            const match = reply.text.match(/🆔 User ID:\s*(\d+)/);
+            if (match && match[1]) {
+                targetUserId = match[1];
+            }
+        }
 
         if (targetUserId) {
             if (text) {
@@ -100,10 +110,9 @@ export async function POST(req: Request) {
                 });
             }
         } else {
-            // Fallback warning if you replied to something that wasn't natively forwarded
             await tg("sendMessage", {
                 chat_id: ADMIN_ID,
-                text: "❌ Cannot reply. Make sure you are replying directly to the user's natively forwarded bubble.",
+                text: "❌ Cannot extract User ID. Ensure you reply directly to the 'Above Message Detail' data block text.",
             });
         }
 
@@ -112,7 +121,6 @@ export async function POST(req: Request) {
 
     /* ---------------- USER → ADMIN FORWARD ---------------- */
     
-    // Stop the bot from forwarding admin logs back to the admin during regular chats
     if (String(userId) === String(ADMIN_ID)) {
         return NextResponse.json({ ok: true });
     }
@@ -124,14 +132,15 @@ export async function POST(req: Request) {
         message_id: message.message_id,
     });
 
-    // 2. Thread the professional context box directly under it using secure HTML parsing
+    // 2. Thread the log detail block
     if (forwardRes && forwardRes.ok) {
         const forwardedMessageId = forwardRes.result.message_id;
         const userName = message.from.first_name || "Unknown";
         
+        // Formatted cleanly without standard HTML wrappers inside the code tag to keep matching strict
         const header = `☝️ <b>Above Message Detail</b>\n` +
                        `👤 <b>Sender:</b> ${userName}\n` +
-                       `🆔 <b>User ID:</b> <code>${userId}</code>`;
+                       `🆔 <b>User ID:</b> ${userId}`;
 
         await tg("sendMessage", {
             chat_id: ADMIN_ID,
@@ -141,7 +150,7 @@ export async function POST(req: Request) {
         });
 
         await tg("sendMessage", {
-            chat_id: chatId, // Sends it back to the user's chat
+            chat_id: chatId, 
             text: "✅ Your message has been received! An admin will review it and contact you soon.",
         });
     }
