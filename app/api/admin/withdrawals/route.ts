@@ -190,7 +190,7 @@ export async function PATCH(request: Request) {
       // Rejected - refund to wallet
       const { data: wallet, error: walletError } = await supabaseAdmin
         .from("wallets")
-        .select("balance")
+        .select("balance, total_withdrawn")
         .eq("user_id", withdrawal.user_id)
         .single()
 
@@ -200,9 +200,10 @@ export async function PATCH(request: Request) {
       }
 
       const newBalance = wallet.balance + withdrawal.amount
+      const newTotalwithdraw = wallet.total_withdrawn - withdrawal.amount
       const { error: balanceError } = await supabaseAdmin
         .from("wallets")
-        .update({ balance: newBalance })
+        .update({ balance: newBalance, total_withdrawn: newTotalwithdraw })
         .eq("user_id", withdrawal.user_id)
 
       if (balanceError) {
@@ -210,15 +211,14 @@ export async function PATCH(request: Request) {
         return NextResponse.json({ error: "Failed to refund balance" }, { status: 500 })
       }
 
-      const { error: rejectionTransactionError } = await supabaseAdmin.from("transactions").insert({
-        user_id: withdrawal.user_id,
-        type: "withdrawal_rejected",
-        amount: withdrawal.amount,
-        status: "refunded",
+      const { error: rejectionTransactionError } = await supabaseAdmin.from("transactions").update({
+        status: "rejected",
         balance_before: wallet.balance,
         balance_after: newBalance,
         description: `Withdrawal rejected - funds refunded. ${adminNotes || 'No reason provided'}`,
       })
+      .eq("reference_id", withdrawal.id)
+      .eq("type", "withdrawal")
 
       if (rejectionTransactionError) {
         console.error("[AlphaGridCS] Failed to create rejection transaction:", rejectionTransactionError)
