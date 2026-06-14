@@ -61,9 +61,24 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/icon_x192.png", // Standard shortcut icon
-    shortcut: "/icon_x192.png",
-    apple: "/apple-icon.png", // Recommended for high-res displays
+    icon: [
+      {
+        url: "/icon_x192.png",
+        type: "image/png", // Tells Google explicitly this is a high-res PNG
+      },
+    ],
+    shortcut: [
+      {
+        url: "/icon_x192.png",
+        type: "image/png",
+      },
+    ],
+    apple: [
+      {
+        url: "/apple-icon.png",
+        type: "image/png",
+      },
+    ],
   },
   alternates: {
     canonical: "/", // This tells Google to append the current path straight to the metadataBase root
