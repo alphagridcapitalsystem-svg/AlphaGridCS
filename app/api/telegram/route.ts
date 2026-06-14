@@ -62,6 +62,8 @@ export async function POST(req: Request) {
 
     /* ---------------- ADMIN REPLY FLOW ---------------- */
 
+    /* ---------------- ADMIN REPLY FLOW ---------------- */
+
     if (String(userId) === String(ADMIN_ID) && reply) {
         let targetUserId: string | null = null;
 
@@ -69,9 +71,10 @@ export async function POST(req: Request) {
         if (reply.forward_from?.id) {
             targetUserId = String(reply.forward_from.id);
         } 
-        // 2. Fallback: Parse the user ID from our custom metadata text block if admin replies to that instead
-        else if (reply.text && reply.text.includes("🆔 User ID:")) {
-            const match = reply.text.match(/🆔 User ID:\s*(\d+)/);
+        // 2. Fallback: Ultra-robust match for the digits inside the text block
+        else if (reply.text) {
+            // This looks specifically for "User ID:" followed by spaces and captures all numbers
+            const match = reply.text.match(/User ID:\s*(\d+)/i);
             if (match && match[1]) {
                 targetUserId = match[1];
             }
