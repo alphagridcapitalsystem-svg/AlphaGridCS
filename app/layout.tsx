@@ -100,8 +100,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    // Kept suppressHydrationWarning here where it belongs
+    // Schema.org WebSite structured data for Google Display Name verification
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      'name': 'AlphaGrid Capital System',
+      'url': 'https://www.alphagridcs.online',
+    };
+  
     <html lang="en" className="bg-background" suppressHydrationWarning>
+      <head>
+        {/* Injecting the site name script seamlessly into the head */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
