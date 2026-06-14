@@ -5,7 +5,6 @@ import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { SuperAdminSeeder } from '@/components/superadmin-seeder'
-import Script from 'next/script'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
@@ -74,23 +73,33 @@ export const viewport: Viewport = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Expanded, high-authority structured data object
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     'name': 'AlphaGrid Capital System',
     'url': 'https://www.alphagridcs.online',
+    'description': 'Secure investment platform offering transparent investment plans, referral rewards, and account management.',
+    'inLanguage': 'en',
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'AlphaGrid Capital System',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': 'https://www.alphagridcs.online/icon_x192.png'
+      }
+    }
   };
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased">
-        {/* Next.js Script component safely placed here so it injects perfectly */}
-        <Script
-          id="structured-data-website"
+        {/* Natively served structural schema block */}
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
