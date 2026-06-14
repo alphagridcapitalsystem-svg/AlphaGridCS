@@ -50,8 +50,6 @@ export default function DepositPage() {
   const [copied, setCopied] = useState<string | null>(null)
   const router = useRouter()
 
-  const MIN_DEPOSIT = 2000
-
   useEffect(() => {
     const fetchPaymentDetails = async () => {
       setIsLoading(true)
@@ -85,6 +83,18 @@ export default function DepositPage() {
         setIsLoading(false)
         return
       }
+
+      const { data: minDeposit, error:minDepositError } = await supabase
+        .from('platform_settings')
+        .select('value')
+        .eq("key", "min_deposit")
+        .single()
+
+      if(minDepositError) {
+        throw minDepositError
+      }
+
+      const MIN_DEPOSIT = Number(minDeposit.value)
 
       // Fallback to platform_settings
       const { data: settings } = await supabase
