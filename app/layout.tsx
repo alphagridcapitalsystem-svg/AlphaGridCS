@@ -1,24 +1,35 @@
 import React from "react"
-import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
-import { SuperAdminSeeder } from '@/components/superadmin-seeder'
-import './globals.css'
+import type { Metadata, Viewport } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 
-const _geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
-const _geistMono = Geist_Mono({ subsets: ["latin"], variable: '--font-mono' });
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
+import { SuperAdminSeeder } from "@/components/superadmin-seeder"
 
-// Static SEO Metadata definition
+import "./globals.css"
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.alphagridcs.online"),
+
   title: {
     default: "AlphaGrid Capital System",
     template: "%s | AlphaGrid Capital System",
   },
+
   description:
     "Secure investment platform offering transparent investment plans, referral rewards, and account management.",
+
   keywords: [
     "AlphaGrid Capital System",
     "investment platform",
@@ -28,78 +39,166 @@ export const metadata: Metadata = {
     "crypto investment",
     "online investing",
   ],
+
+  alternates: {
+    canonical: "https://www.alphagridcs.online",
+  },
+
   openGraph: {
     title: "AlphaGrid Capital System",
     description: "Build your wealth with trusted investment plans.",
     url: "https://www.alphagridcs.online",
     siteName: "AlphaGrid Capital System",
+    locale: "en_US",
+    type: "website",
+
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
+        alt: "AlphaGrid Capital System",
       },
     ],
-    locale: "en_US",
-    type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "AlphaGrid Capital System",
     description: "Build your wealth with trusted investment plans.",
     images: ["/og-image.png"],
   },
+
   robots: {
     index: true,
     follow: true,
-  },
-  icons: {
-    icon: [{ url: "/icon_x192.png", type: "image/png" }],
-    shortcut: [{ url: "/icon_x192.png", type: "image/png" }],
-    apple: [{ url: "/apple-icon.png", type: "image/png" }],
-  },
-  alternates: {
-    canonical: "/",
-  },
-};
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#8B6914' },
-    { media: '(prefers-color-scheme: dark)', color: '#1a1612' },
-  ],
-  width: 'device-width',
-  initialScale: 1,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+      "max-snippet": -1,
+    },
+  },
+
+  manifest: "/site.webmanifest",
+
+  icons: {
+    icon: [
+      {
+        url: "/favicon.ico",
+        sizes: "any",
+      },
+      {
+        url: "/favicon-16x16.png",
+        type: "image/png",
+        sizes: "16x16",
+      },
+      {
+        url: "/favicon-32x32.png",
+        type: "image/png",
+        sizes: "32x32",
+      },
+      {
+        url: "/android-chrome-192x192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
+      {
+        url: "/android-chrome-512x512.png",
+        type: "image/png",
+        sizes: "512x512",
+      },
+    ],
+
+    shortcut: ["/favicon.ico"],
+
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Expanded, high-authority structured data object
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+
+  themeColor: [
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "#8B6914",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "#1a1612",
+    },
+  ],
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    'name': 'AlphaGrid Capital System',
-    'url': 'https://www.alphagridcs.online',
-    'description': 'Secure investment platform offering transparent investment plans, referral rewards, and account management.',
-    'inLanguage': 'en',
-    'publisher': {
-      '@type': 'Organization',
-      'name': 'AlphaGrid Capital System',
-      'logo': {
-        '@type': 'ImageObject',
-        'url': 'https://www.alphagridcs.online/icon_x192.png'
-      }
-    }
-  };
+    "@context": "https://schema.org",
+
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.alphagridcs.online/#organization",
+
+        name: "AlphaGrid Capital System",
+
+        url: "https://www.alphagridcs.online",
+
+        logo: {
+          "@type": "ImageObject",
+          url: "https://www.alphagridcs.online/android-chrome-512x512.png",
+        },
+      },
+
+      {
+        "@type": "WebSite",
+        "@id": "https://www.alphagridcs.online/#website",
+
+        url: "https://www.alphagridcs.online",
+
+        name: "AlphaGrid Capital System",
+
+        description:
+          "Secure investment platform offering transparent investment plans, referral rewards, and account management.",
+
+        inLanguage: "en",
+
+        publisher: {
+          "@id": "https://www.alphagridcs.online/#organization",
+        },
+      },
+    ],
+  }
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased">
-        {/* Natively served structural schema block */}
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geist.variable} ${geistMono.variable}`}
+    >
+      <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd),
+          }}
         />
-        
+      </head>
+
+      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -108,9 +207,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           storageKey="theme-preference"
         >
           {children}
+
           <Toaster />
+
           <SuperAdminSeeder />
         </ThemeProvider>
+
         <Analytics />
       </body>
     </html>
