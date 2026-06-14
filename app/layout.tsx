@@ -1,12 +1,10 @@
 import React from "react"
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
+import { Analytics } from '@vercelanalytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { SuperAdminSeeder } from '@/components/superadmin-seeder'
-// 1. IMPORT THE NEXT.JS SCRIPT COMPONENT
-import Script from 'next/script' 
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
@@ -88,11 +86,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-background" suppressHydrationWarning>
       <body className="font-sans antialiased">
-        {/* 2. USE NEXT.JS SCRIPT TO FORCE INJECTION IN PRE-RENDER */}
-        <Script
-          id="structured-data-website"
+        {/* Standard HTML Script tag embedded directly in the tree to escape Next context drops */}
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
