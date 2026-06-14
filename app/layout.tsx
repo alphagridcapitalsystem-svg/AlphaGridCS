@@ -45,8 +45,8 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "AlphaGrid Capital System",
-    description: "Build your wealth with trusted investment plans.",
+    title: "AlphaGrid Capital System | Secure Investment & Wealth Platform",
+    description: "Secure investment platform offering transparent investment plans, referral rewards, automated account management, and real-time portfolio tracking for global users.",
     url: "https://www.alphagridcs.online",
     siteName: "AlphaGrid Capital System",
     locale: "en_US",
@@ -64,8 +64,8 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "AlphaGrid Capital System",
-    description: "Build your wealth with trusted investment plans.",
+    title: "AlphaGrid Capital System | Secure Investment & Wealth Platform",
+    description: "Secure investment platform offering transparent investment plans, referral rewards, automated account management, and real-time portfolio tracking for global users.",
     images: ["/og-image.png"],
   },
 
@@ -153,7 +153,7 @@ export default function RootLayout({
         "@type": "Organization",
         "@id": "https://www.alphagridcs.online/#organization",
 
-        name: "AlphaGrid Capital System",
+        name: "AlphaGrid Capital System | Secure Investment & Wealth Platform",
 
         url: "https://www.alphagridcs.online",
 
@@ -169,10 +169,10 @@ export default function RootLayout({
 
         url: "https://www.alphagridcs.online",
 
-        name: "AlphaGrid Capital System",
+        name: "AlphaGrid Capital System | Secure Investment & Wealth Platform",
 
         description:
-          "Secure investment platform offering transparent investment plans, referral rewards, and account management.",
+          "Secure investment platform offering transparent investment plans, referral rewards, automated account management, and real-time portfolio tracking for global users.",
 
         inLanguage: "en",
 
