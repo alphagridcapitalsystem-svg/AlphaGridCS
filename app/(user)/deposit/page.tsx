@@ -49,7 +49,7 @@ export default function DepositPage() {
   const [success, setSuccess] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
   const router = useRouter()
-  const [MIN_DEPOSIT, setMinDeposit] = useState(0)
+  const [minDeposit, setMinDeposit] = useState(0)
 
   useEffect(() => {
     const fetchPaymentDetails = async () => {
@@ -138,8 +138,8 @@ export default function DepositPage() {
     setError(null)
     
     const amountNum = parseFloat(amount)
-    if (isNaN(amountNum) || amountNum < MIN_DEPOSIT) {
-      setError(`Minimum deposit amount is ETB ${MIN_DEPOSIT.toLocaleString()}`)
+    if (isNaN(amountNum) || amountNum < minDeposit) {
+      setError(`Minimum deposit amount is ETB ${minDeposit.toLocaleString()}`)
       return
     }
     
@@ -294,7 +294,7 @@ export default function DepositPage() {
           <CardHeader>
             <CardTitle>Enter Amount</CardTitle>
             <CardDescription>
-              Minimum deposit is ETB {MIN_DEPOSIT.toLocaleString()}
+              Minimum deposit is ETB {minDeposit.toLocaleString()}
             </CardDescription>
           </CardHeader>
           <CardContent>
