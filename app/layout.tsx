@@ -23,12 +23,12 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.alphagridcs.online"),
 
   title: {
-    default: "AlphaGrid Capital System",
+    default: "AlphaGrid Capital System Secure Investment Platform",
     template: "%s | AlphaGrid Capital System",
   },
 
   description:
-    "Secure investment platform offering transparent investment plans, referral rewards, automated account management, and real-time portfolio tracking for global users.",
+    "Secure investment platform offering transparent investment plans, referral rewards, automated account management, and real-time portfolio tracking for users.",
 
   keywords: [
     "AlphaGrid Capital System",
@@ -45,8 +45,8 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "AlphaGrid Capital System | Secure Investment & Wealth Platform",
-    description: "Secure investment platform offering transparent investment plans, referral rewards, automated account management, and real-time portfolio tracking for global users.",
+    title: "AlphaGrid Capital System | Secure Investment Platform",
+    description: "Secure investment platform offering transparent plans, referral rewards, account management, and portfolio tracking tools.",
     url: "https://www.alphagridcs.online",
     siteName: "AlphaGrid Capital System",
     locale: "en_US",
