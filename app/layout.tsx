@@ -1,7 +1,7 @@
 import React from "react"
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercelanalytics/next'
+import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { SuperAdminSeeder } from '@/components/superadmin-seeder'
@@ -10,6 +10,7 @@ import './globals.css'
 const _geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
 const _geistMono = Geist_Mono({ subsets: ["latin"], variable: '--font-mono' });
 
+// Static SEO Metadata definition
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.alphagridcs.online"),
   title: {
@@ -76,6 +77,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Pure structural schema object
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -85,13 +87,14 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="bg-background" suppressHydrationWarning>
-      <body className="font-sans antialiased">
-        {/* Standard HTML Script tag embedded directly in the tree to escape Next context drops */}
+      <head>
+        {/* Safe framework injection mechanism for structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-
+      </head>
+      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
