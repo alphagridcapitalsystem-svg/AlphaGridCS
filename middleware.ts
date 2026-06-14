@@ -5,6 +5,17 @@ export async function middleware(req: any) {
   const url = req.nextUrl.clone()
   const pathname = url.pathname
 
+  // Force HTTPS and WWW redirect for production mapping
+  if (process.env.NODE_ENV === "production") {
+    const host = req.headers.get("host") || "";
+    
+    // If the host doesn't start with www., or the request protocol isn't secure https
+    if (!host.startsWith("www.") || req.headers.get("x-forwarded-proto") !== "https") {
+      return NextResponse.redirect(`https://www.alphagridcs.online${pathname}`, 301); 
+      // Note: 301 is a permanent redirect, which explicitly forces Google to update its layout index
+    }
+  }
+
   // 1. CRITICAL SEO EXCLUSIONS: Always allow Google to read these structural files,
   // even if maintenance mode is enabled. Otherwise, Google drops your site index.
   const isSitemap = pathname === "/sitemap.xml"
