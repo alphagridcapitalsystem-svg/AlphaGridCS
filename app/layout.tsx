@@ -5,22 +5,21 @@ import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { SuperAdminSeeder } from '@/components/superadmin-seeder'
+// 1. IMPORT THE NEXT.JS SCRIPT COMPONENT
+import Script from 'next/script' 
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const _geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
+const _geistMono = Geist_Mono({ subsets: ["latin"], variable: '--font-mono' });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.alphagridcs.online"),
-
   title: {
     default: "AlphaGrid Capital System",
     template: "%s | AlphaGrid Capital System",
   },
-  
   description:
     "Secure investment platform offering transparent investment plans, referral rewards, and account management.",
-
   keywords: [
     "AlphaGrid Capital System",
     "investment platform",
@@ -30,11 +29,9 @@ export const metadata: Metadata = {
     "crypto investment",
     "online investing",
   ],
-
   openGraph: {
     title: "AlphaGrid Capital System",
-    description:
-      "Build your wealth with trusted investment plans.",
+    description: "Build your wealth with trusted investment plans.",
     url: "https://www.alphagridcs.online",
     siteName: "AlphaGrid Capital System",
     images: [
@@ -47,41 +44,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
     title: "AlphaGrid Capital System",
-    description:
-      "Build your wealth with trusted investment plans.",
+    description: "Build your wealth with trusted investment plans.",
     images: ["/og-image.png"],
   },
-  
   robots: {
     index: true,
     follow: true,
   },
   icons: {
-    icon: [
-      {
-        url: "/icon_x192.png",
-        type: "image/png", // Tells Google explicitly this is a high-res PNG
-      },
-    ],
-    shortcut: [
-      {
-        url: "/icon_x192.png",
-        type: "image/png",
-      },
-    ],
-    apple: [
-      {
-        url: "/apple-icon.png",
-        type: "image/png",
-      },
-    ],
+    icon: [{ url: "/icon_x192.png", type: "image/png" }],
+    shortcut: [{ url: "/icon_x192.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", type: "image/png" }],
   },
   alternates: {
-    canonical: "/", // This tells Google to append the current path straight to the metadataBase root
+    canonical: "/",
   },
 };
 
@@ -108,14 +87,15 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="bg-background" suppressHydrationWarning>
-      {/* NO MANUAL HEAD TAG HERE — Next.js handles it via metadata */}
       <body className="font-sans antialiased">
-        {/* Safe JSON-LD injection directly at the top of body */}
-        <script
+        {/* 2. USE NEXT.JS SCRIPT TO FORCE INJECTION IN PRE-RENDER */}
+        <Script
+          id="structured-data-website"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        
+
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
