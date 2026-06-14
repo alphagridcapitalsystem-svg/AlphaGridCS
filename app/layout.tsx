@@ -99,15 +99,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // FIXED: Declared cleanly before the return statement
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    'name': 'AlphaGrid Capital System',
+    'url': 'https://www.alphagridcs.online',
+  };
+
   return (
-    // Schema.org WebSite structured data for Google Display Name verification
-    const jsonLd = {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      'name': 'AlphaGrid Capital System',
-      'url': 'https://www.alphagridcs.online',
-    };
-  
     <html lang="en" className="bg-background" suppressHydrationWarning>
       <head>
         {/* Injecting the site name script seamlessly into the head */}
@@ -123,7 +123,6 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
           storageKey="theme-preference"
-          // REMOVED suppressHydrationWarning from here to fix the TS error
         >
           {children}
           <Toaster />
