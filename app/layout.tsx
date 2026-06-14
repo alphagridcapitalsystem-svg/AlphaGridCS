@@ -99,7 +99,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // FIXED: Declared cleanly before the return statement
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -109,14 +108,14 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="bg-background" suppressHydrationWarning>
-      <head>
-        {/* Injecting the site name script seamlessly into the head */}
+      {/* NO MANUAL HEAD TAG HERE — Next.js handles it via metadata */}
+      <body className="font-sans antialiased">
+        {/* Safe JSON-LD injection directly at the top of body */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className="font-sans antialiased">
+        
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
