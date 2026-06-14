@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: "AlphaGrid Capital System",
     images: [
       {
-        url: "/icon.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
       },
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "AlphaGrid Capital System",
     description:
       "Build your wealth with trusted investment plans.",
-    images: ["/icon.png"],
+    images: ["/og-image.png"],
   },
   
   robots: {
